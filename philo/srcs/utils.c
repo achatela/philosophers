@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 09:01:57 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/02 14:17:01 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/02 18:18:10 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,32 +38,6 @@ int	ft_atoi(const char *nptr)
 	return (number * neg);
 }
 
-/*void	ft_lstadd_back(t_fourchette *alst, t_fourchette *new)
-{
-	t_fourchette	*head;
-
-	if (!alst)
-		alst = new;
-	if (alst)
-	{
-		head = alst;
-		while (head->next != NULL)
-			head = head->next;
-		head->next = new;
-	}
-}*/
-
-/*t_fourchette	*ft_lstnew(void *content)
-{
-	t_fourchette	*new;
-
-	new = malloc(sizeof(t_fourchette) * 1);
-	if (!new)
-		return (NULL);
-	new->next = content;
-	return (new);
-}*/
-
 long int	get_time(struct timeval end, struct timeval *start)
 {
 	long int	time;
@@ -83,8 +57,7 @@ void	ft_free(t_philos *philos, char **argv)
 	while (i-- > 0)
 	{
 		head = philos->next;
-		//pthread_mutex_destroy(philos->fork);
-		//free(philos->fork);
+		free(philos->left_fork);
 		free(philos);
 		philos = head;
 	}
