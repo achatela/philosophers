@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 08:58:02 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/02 16:48:20 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/05 19:20:13 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ struct s_philos
 	int				time_to_sleep;
 	int				must_eat;
 	int				last_eat;
+	int				count;
 	pthread_t		*threads;
 	struct timeval	*start;
 	pthread_mutex_t	*write;

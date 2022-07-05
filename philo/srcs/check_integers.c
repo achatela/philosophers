@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 09:10:14 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/02 09:48:39 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/05 18:29:46 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,5 @@ int	check_args(char **argv, int argc, int i)
 		if (ft_atoi(argv[i]) < 0)
 			return (printf("Invalid format\n"), 1);
 	}
-	if (ft_atoi(argv[2]) <= (ft_atoi(argv[3]) + ft_atoi(argv[4])))
-		return (printf("Time to die is lower than sleeping + eating time\n"), 1);
 	return (0);
 }
