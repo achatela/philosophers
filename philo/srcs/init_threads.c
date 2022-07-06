@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:20:07 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/06 15:21:21 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/06 15:26:38 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,29 +22,29 @@ static void	*print_number(void *param)
 	if (philo->number == 1)
 		gettimeofday(philo->start, NULL);
 	if (philo->number % 2 == 0)
-		usleep(philo->time_to_die * 500);
-	//usleep(philo->number * 1000);
+		usleep(philo->time_to_eat * 500);
 	while (*philo->alive == 0 && (philo->must_eat == -1
 			|| philo->count != philo->must_eat))
 	{
-		if (*philo->alive == 1)
-			break;
-		pthread_mutex_lock(philo->right_fork);
-		gettimeofday(&end, NULL);
-		printf("%ld %d has taken a fork\n",
-			get_time(end, philo->start), philo->number);
-		if (*philo->alive == 1)
-			break;
 		pthread_mutex_lock(philo->left_fork);
+		if (*philo->alive == 1)
+			break;
 		gettimeofday(&end, NULL);
 		printf("%ld %d has taken a fork\n",
 			get_time(end, philo->start), philo->number);
+		pthread_mutex_lock(philo->right_fork);
 		if (*philo->alive == 1)
 			break;
+		gettimeofday(&end, NULL);
+		printf("%ld %d has taken a fork\n",
+			get_time(end, philo->start), philo->number);
 		gettimeofday(&end, NULL);
 		philo->last_eat = get_time(end, philo->start);
-		usleep(philo->time_to_eat * 1000);
+		if (*philo->alive == 1)
+			break;
+		gettimeofday(&end, NULL);
 		printf("%ld %d is eating\n", get_time(end, philo->start), philo->number);
+		usleep(philo->time_to_eat * 1000);
 		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
 		if (*philo->alive == 1)
@@ -72,6 +72,8 @@ static void	*catch_death(void *philos)
 	number = philo->number;
 	while (1)
 	{
+		if (*philo->alive == 1 || philo->count == philo->must_eat)
+			break;
 		while (++i < number)
 		{
 			gettimeofday(&end, NULL);
@@ -86,22 +88,16 @@ static void	*catch_death(void *philos)
 				printf("Previous eating of %d was %d\n", philo->number, philo->last_eat);
 				break;
 			}
-			if (philo->count == philo->must_eat)
-				break;
 			philo = philo->next;
-		}		
-		if (*philo->alive == 1)
-			break;
-		if (philo->count == philo->must_eat)
-			break;
+		}
 		i = -1;
 	}
-	i = -1;
-	philo = (t_philos *)philos;
 	if (*philo->alive == 1)
 	{
 		while (++i < philo->number)
+		{
 			pthread_detach(threads[i]);
+		}
 	}
 	else
 	{
@@ -122,7 +118,6 @@ void	init_threads(t_philos *philos, pthread_t *threads, int i, char **argv)
 		if (pthread_create(&threads[i], NULL,
 				&print_number, philos) != 0)
 			return ;
-		usleep(100);
 		philos = philos->next;
 	}
 	philos->threads = threads;
