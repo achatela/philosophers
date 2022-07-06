@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 09:01:57 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/02 18:18:10 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/06 15:48:28 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,28 @@ long int	get_time(struct timeval end, struct timeval *start)
 void	ft_free(t_philos *philos, char **argv)
 {
 	t_philos	*head;
+	t_forks		*forks;
+	t_forks		*head_forks;
 	int			i;
 
-	i = ft_atoi(argv[1]);
+	i = -1;
+	forks = philos->free_fork;
+	pthread_mutex_destroy(philos->write);
+	free(philos->write);
 	free(philos->alive);
-	while (i-- > 0)
+	while (++i < ft_atoi(argv[1]))
 	{
 		head = philos->next;
-		free(philos->left_fork);
 		free(philos);
 		philos = head;
+	}
+	i = -1;
+	while (++i < ft_atoi(argv[1]))
+	{
+		head_forks = forks;
+		forks = forks->next;
+		pthread_mutex_destroy(head_forks->fork);
+		free(head_forks->fork);
+		free(head_forks);
 	}
 }

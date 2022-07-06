@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:20:07 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/06 15:26:38 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/06 16:08:31 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,26 +27,29 @@ static void	*print_number(void *param)
 			|| philo->count != philo->must_eat))
 	{
 		pthread_mutex_lock(philo->left_fork);
+		usleep(111);
 		if (*philo->alive == 1)
 			break;
 		gettimeofday(&end, NULL);
 		printf("%ld %d has taken a fork\n",
 			get_time(end, philo->start), philo->number);
 		pthread_mutex_lock(philo->right_fork);
+		usleep(111);
 		if (*philo->alive == 1)
 			break;
 		gettimeofday(&end, NULL);
 		printf("%ld %d has taken a fork\n",
 			get_time(end, philo->start), philo->number);
-		gettimeofday(&end, NULL);
-		philo->last_eat = get_time(end, philo->start);
+		usleep(111);
 		if (*philo->alive == 1)
 			break;
 		gettimeofday(&end, NULL);
+		philo->last_eat = get_time(end, philo->start);
 		printf("%ld %d is eating\n", get_time(end, philo->start), philo->number);
 		usleep(philo->time_to_eat * 1000);
 		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
+		usleep(111);
 		if (*philo->alive == 1)
 			break;
 		gettimeofday(&end, NULL);
@@ -56,6 +59,21 @@ static void	*print_number(void *param)
 		philo->count++;
 	}
 	return (NULL);
+}
+
+static int	is_finished(t_philos *philo, int number)
+{
+	int	i;
+
+	i = -1;
+	while (++i < number)
+	{
+		if (philo->count != philo->must_eat)
+			return (0);
+		else
+			philo = philo->next;
+	}
+	return (1);
 }
 
 static void	*catch_death(void *philos)
@@ -72,7 +90,9 @@ static void	*catch_death(void *philos)
 	number = philo->number;
 	while (1)
 	{
-		if (*philo->alive == 1 || philo->count == philo->must_eat)
+		if (*philo->alive == 1) //|| philo->count == philo->must_eat)
+			break;
+		if (is_finished((t_philos *)philos, number) == 1)
 			break;
 		while (++i < number)
 		{
@@ -120,6 +140,7 @@ void	init_threads(t_philos *philos, pthread_t *threads, int i, char **argv)
 			return ;
 		philos = philos->next;
 	}
+	usleep(60000);
 	philos->threads = threads;
 	pthread_create(&threads[i], NULL, &catch_death, philos);
 	pthread_join(threads[i], NULL);
