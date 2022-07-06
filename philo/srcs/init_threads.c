@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:20:07 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/05 19:35:20 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/06 15:01:06 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,21 @@ static void	*print_number(void *param)
 			|| philo->count != philo->must_eat))
 	{
 		gettimeofday(&end, NULL);
-		pthread_mutex_lock(philo->left_fork);
+		usleep(100);
 		if (*philo->alive == 1)
 			break;
+		pthread_mutex_lock(philo->left_fork);
 		printf("%ld %d has taken a fork\n",
 			get_time(end, philo->start), philo->number);
-		pthread_mutex_lock(philo->right_fork);
+		usleep(100);
 		if (*philo->alive == 1)
 			break;
+		pthread_mutex_lock(philo->right_fork);
 		printf("%ld %d has taken a fork\n",
 			get_time(end, philo->start), philo->number);
 		gettimeofday(&end, NULL);
 		philo->last_eat = get_time(end, philo->start);
+		usleep(100);
 		if (*philo->alive == 1)
 			break;
 		printf("%ld %d is eating\n", get_time(end, philo->start), philo->number);
@@ -46,6 +49,7 @@ static void	*print_number(void *param)
 		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
 		gettimeofday(&end, NULL);
+		usleep(100);
 		if (*philo->alive == 1)
 			break;
 		printf("%ld %d is sleeping\n",
@@ -70,8 +74,6 @@ static void	*catch_death(void *philos)
 	number = philo->number;
 	while (1)
 	{
-		if (*philo->alive == 1 || philo->count == philo->must_eat)
-			break;
 		while (++i < number)
 		{
 			gettimeofday(&end, NULL);
@@ -86,16 +88,22 @@ static void	*catch_death(void *philos)
 				printf("Previous eating of %d was %d\n", philo->number, philo->last_eat);
 				break;
 			}
+			if (philo->count == philo->must_eat)
+				break;
 			philo = philo->next;
-		}
+		}		
+		if (*philo->alive == 1)
+			break;
+		if (philo->count == philo->must_eat)
+			break;
 		i = -1;
 	}
+	i = -1;
+	philo = (t_philos *)philos;
 	if (*philo->alive == 1)
 	{
 		while (++i < philo->number)
-		{
 			pthread_detach(threads[i]);
-		}
 	}
 	else
 	{

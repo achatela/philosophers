@@ -5,7 +5,7 @@ SRCS	=	srcs/main.c	srcs/check_integers.c srcs/utils.c srcs/init_philos.c srcs/in
 OBJS = $(SRCS:.c=.o)
 CC = gcc
 RM = rm -f
-CFLAGS = -Wall -Wextra #-fsanitize=thread#-Werror -Wextra
+CFLAGS = -Wall -Wextra #-fsanitize=address #-Werror -Wextra
 INC = -I./includes
 
 .c.o:
