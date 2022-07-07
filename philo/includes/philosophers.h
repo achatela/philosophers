@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 08:58:02 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/05 19:20:13 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/07 11:28:23 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <unistd.h>
 # include <time.h>
 # include <sys/time.h>
+# include <errno.h>
 
 typedef struct s_forks	t_forks;
 struct s_forks
