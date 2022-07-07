@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:20:07 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/06 17:17:07 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/07 11:23:29 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,43 +22,55 @@ static void	*philo_actions(void *param)
 	if (philo->number == 1)
 		gettimeofday(philo->start, NULL);
 	if (philo->number % 2 == 0)
-		usleep(philo->time_to_eat * 500);
+		usleep(philo->time_to_eat * 100);
 	while (*philo->alive == 0 && (philo->must_eat == -1
 			|| philo->count != philo->must_eat))
 	{
-		usleep(1000);
-		if (*philo->alive == 1)
-			break ;
-		gettimeofday(&end, NULL);
+		//if (*philo->alive == 1)
+		//	break ;
 		pthread_mutex_lock(philo->left_fork);
 		if (*philo->alive == 0)
-			printf("%ld %d has taken a fork\n",
+		{
+			pthread_mutex_lock(philo->write);
+			gettimeofday(&end, NULL);
+			printf("%ld %d has taken a left fork\n",
 				get_time(end, philo->start), philo->number);
-		usleep(100);
-		if (*philo->alive == 1)
-			break ;
-		gettimeofday(&end, NULL);
+			pthread_mutex_unlock(philo->write);
+		}
+		//if (*philo->alive == 1)
+		//	break ;
 		pthread_mutex_lock(philo->right_fork);
 		if (*philo->alive == 0)
-			printf("%ld %d has taken a fork\n",
+		{
+			pthread_mutex_lock(philo->write);
+			gettimeofday(&end, NULL);
+			printf("%ld %d has taken a right fork\n",
 				get_time(end, philo->start), philo->number);
-		usleep(1000);
-		if (*philo->alive == 1)
-			break ;
-		gettimeofday(&end, NULL);
+			pthread_mutex_unlock(philo->write);
+		}
+		//if (*philo->alive == 1)
+		//	break ;
 		if (*philo->alive == 0)
+		{
+			pthread_mutex_lock(philo->write);
+			gettimeofday(&end, NULL);
 			printf("%ld %d is eating\n", get_time(end, philo->start), philo->number);
+			pthread_mutex_unlock(philo->write);
+		}
 		philo->last_eat = get_time(end, philo->start);
 		usleep(philo->time_to_eat * 1000);
 		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
-		usleep(1000);
-		if (*philo->alive == 1)
-			break ;
-		gettimeofday(&end, NULL);
+		//if (*philo->alive == 1)
+		//	break ;
 		if (*philo->alive == 0)
+		{
+			pthread_mutex_lock(philo->write);
+			gettimeofday(&end, NULL);
 			printf("%ld %d is sleeping\n",
 				get_time(end, philo->start), philo->number);
+			pthread_mutex_unlock(philo->write);
+		}
 		usleep(philo->time_to_sleep * 1000);
 		philo->count++;
 	}
@@ -100,10 +112,12 @@ static void	*catch_death(void *philos)
 		{
 			gettimeofday(&end, NULL);
 			if (get_time(end, philo->start)
-				- philo->last_eat >= philo->time_to_die)
+				- philo->last_eat >= philo->time_to_die
+				&& philo->count != philo->time_to_eat)
 				*philo->alive = 1;
 			if (*philo->alive == 1)
 			{
+				pthread_mutex_unlock(philo->write);
 				pthread_mutex_lock(philo->write);
 				printf("%ld %d died !\n",
 					get_time(end, philo->start), philo->number);
@@ -122,6 +136,7 @@ static void	*catch_death(void *philos)
 		pthread_join(threads[i], NULL);
 		pthread_detach(threads[i]);
 	}
+	pthread_mutex_unlock(philo->write);
 	return (NULL);
 }
 
@@ -135,11 +150,11 @@ void	init_threads(t_philos *philos, pthread_t *threads, int i, char **argv)
 			return ;
 		philos = philos->next;
 	}
-	usleep(philos->time_to_die * 998);
+	usleep(philos->time_to_die * 500);
 	philos->threads = threads;
 	pthread_create(&threads[i], NULL, &catch_death, philos);
 	pthread_join(threads[i], NULL);
 	pthread_detach(threads[i]);
 	free(threads);
-	pthread_mutex_unlock(philos->write);
+	//pthread_mutex_unlock(philos->write);
 }
