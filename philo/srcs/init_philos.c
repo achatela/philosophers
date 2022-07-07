@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 09:22:37 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/06 15:49:50 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/07 16:36:19 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,28 @@ int argc, int number)
 	return (head);
 }
 
+static t_philos	*init_mutexes(t_philos *philo, int i, int number, t_philos *head)
+{
+	pthread_mutex_t	*m_alive;
+	pthread_mutex_t	*m_start;
+	pthread_mutex_t	*m_count;
+
+	m_count = malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(m_count, NULL);
+	m_alive = malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(m_alive, NULL);
+	m_start = malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(m_start, NULL);
+	while (++i < number)
+	{
+		philo->m_count = m_count;
+		philo->m_alive = m_alive;
+		philo->m_start = m_start;
+		philo = philo->next;
+	}
+	return (head);
+}
+
 t_philos	*init_philos(char **argv, int argc)
 {
 	t_philos	*philos;
@@ -125,5 +147,6 @@ t_philos	*init_philos(char **argv, int argc)
 		return (NULL);
 	philos->start->tv_usec = 0;
 	*philos->alive = 0;
+	philos = init_mutexes(philos, -1, ft_atoi(argv[1]), philos);
 	return (philos);
 }

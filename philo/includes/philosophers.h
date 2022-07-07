@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 08:58:02 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/07 12:20:07 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/07 14:54:16 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,9 @@ struct s_philos
 	pthread_mutex_t	*write;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*m_alive;
+	pthread_mutex_t	*m_count;
+	pthread_mutex_t	*m_start;
 	t_forks			*free_fork;
 	t_philos		*next;
 	t_philos		*before;
@@ -53,7 +56,7 @@ int			ft_atoi(const char *nptr);
 //void	ft_lstadd_back(t_fourchette *alst, t_fourchette *new);
 //t_fourchette	*ft_lstnew(void *content);
 void		*philo_actions(void *param);
-long int	get_time(struct timeval end, struct timeval *start);
+long int	get_time(struct timeval end, struct timeval *start, t_philos *philo);
 int			check_args(char **argv, int argc, int i);
 void		ft_free(t_philos *philos, char **argv);
 t_philos	*init_philos(char **argv, int argc);
