@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 08:58:02 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/07 11:28:23 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/07 12:20:07 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ struct s_philos
 int			ft_atoi(const char *nptr);
 //void	ft_lstadd_back(t_fourchette *alst, t_fourchette *new);
 //t_fourchette	*ft_lstnew(void *content);
+void		*philo_actions(void *param);
 long int	get_time(struct timeval end, struct timeval *start);
 int			check_args(char **argv, int argc, int i);
 void		ft_free(t_philos *philos, char **argv);

@@ -1,11 +1,11 @@
 NAME	= philo
 
-SRCS	=	srcs/main.c	srcs/check_integers.c srcs/utils.c srcs/init_philos.c srcs/init_threads.c \
+SRCS	=	srcs/main.c	srcs/check_integers.c srcs/utils.c srcs/init_philos.c srcs/init_threads.c srcs/philo_actions.c 	\
 
 OBJS = $(SRCS:.c=.o)
 CC = gcc
 RM = rm -f
-CFLAGS = -Wall -Wextra -Werror #-fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror
 INC = -I./includes
 
 .c.o:

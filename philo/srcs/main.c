@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 08:56:35 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/07 10:38:09 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/07 12:14:03 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	main(int argc, char **argv)
 	if (philos == NULL)
 		return (2);
 	init_threads(philos, NULL, -1, argv);
-	usleep(200000);
+	usleep(210000);
 	free(philos->start);
 	ft_free(philos, argv);
 	return (0);
