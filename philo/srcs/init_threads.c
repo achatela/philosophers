@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:20:07 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/07 16:39:57 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/09 16:23:04 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ static int	is_finished(t_philos *philo, int number)
 		if (philo->count != philo->must_eat)
 		{
 			pthread_mutex_unlock(philo->m_count);
-		//	printf("0 returned, %d, %d number = %d\n", philo->count, philo->must_eat, philo->number);
 			return (0);
 		}
 		pthread_mutex_unlock(philo->m_count);
@@ -50,9 +49,15 @@ static void	*catch_while(t_philos *philo, int number, struct timeval end, int i)
 		if (get_time(end, philo->start, philo)
 			- philo->last_eat >= philo->time_to_die
 			&& philo->count != philo->time_to_eat)
+		{
+			pthread_mutex_lock(philo->m_alive);
 			*philo->alive = 1;
+			pthread_mutex_unlock(philo->m_alive);
+		}
+		pthread_mutex_lock(philo->m_alive);
 		if (*philo->alive == 1)
 		{
+			pthread_mutex_unlock(philo->m_alive);
 			pthread_mutex_lock(philo->write);
 			printf("%ld %d died !\n",
 				get_time(end, philo->start, philo), philo->number);
@@ -60,6 +65,7 @@ static void	*catch_while(t_philos *philo, int number, struct timeval end, int i)
 				philo->number, philo->last_eat);
 			return (NULL);
 		}
+		pthread_mutex_unlock(philo->m_alive);
 		philo = philo->next;
 	}
 	i = -1;

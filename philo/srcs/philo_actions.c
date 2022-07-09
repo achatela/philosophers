@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 12:19:38 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/07 16:35:24 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/09 19:15:32 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,9 @@ void	*philo_actions(void *param)
 	struct timeval	end;
 
 	philo = param;
+	pthread_mutex_lock(philo->m_count);
 	philo->count = 0;
+	pthread_mutex_unlock(philo->m_count);
 	if (philo->number == 1)
 	{
 		pthread_mutex_lock(philo->m_start);
