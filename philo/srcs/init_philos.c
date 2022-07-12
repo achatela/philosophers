@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 09:22:37 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/07 16:36:19 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/12 15:52:58 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,10 @@ static t_philos	*init_mutexes(t_philos *philo, int i, int number, t_philos *head
 	pthread_mutex_t	*m_alive;
 	pthread_mutex_t	*m_start;
 	pthread_mutex_t	*m_count;
+	pthread_mutex_t	*m_last;
 
+	m_last = malloc(sizeof(pthread_mutex_t));
+	pthread_mutex_init(m_last, NULL);
 	m_count = malloc(sizeof(pthread_mutex_t));
 	pthread_mutex_init(m_count, NULL);
 	m_alive = malloc(sizeof(pthread_mutex_t));
@@ -125,6 +128,7 @@ static t_philos	*init_mutexes(t_philos *philo, int i, int number, t_philos *head
 	pthread_mutex_init(m_start, NULL);
 	while (++i < number)
 	{
+		philo->m_last = m_last;
 		philo->m_count = m_count;
 		philo->m_alive = m_alive;
 		philo->m_start = m_start;

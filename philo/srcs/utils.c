@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 09:01:57 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/07 15:38:41 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/12 15:59:46 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ long int	get_time(struct timeval end, struct timeval *start, t_philos *philo)
 	return (time);
 }
 
-void	ft_free(t_philos *philos, char **argv)
+void	ft_free(t_philos *philos, char **argv, pthread_mutex_t *m_global)
 {
 	t_philos	*head;
 	t_forks		*forks;
@@ -57,16 +57,25 @@ void	ft_free(t_philos *philos, char **argv)
 	int			i;
 
 	i = -1;
+	pthread_mutex_lock(m_global);
 	forks = philos->free_fork;
+	//if (pthread_mutex_lock(philos->write) == EBUSY)
+	//	pthread_mutex_unlock(philos->write);
 	pthread_mutex_destroy(philos->write);
+//	if (pthread_mutex_lock(philos->m_count) == EBUSY)
+//		pthread_mutex_unlock(philos->m_count);
 	pthread_mutex_destroy(philos->m_count);
+	//pthread_mutex_unlock(philos->m_alive);
 	pthread_mutex_destroy(philos->m_alive);
+	//pthread_mutex_lock(philos->m_start);
 	pthread_mutex_destroy(philos->m_start);
 	free(philos->m_count);
 	free(philos->m_start);
 	free(philos->m_alive);
 	free(philos->write);
 	free(philos->alive);
+	pthread_mutex_unlock(m_global);
+	pthread_mutex_destroy(m_global);
 	while (++i < ft_atoi(argv[1]))
 	{
 		head = philos->next;
@@ -82,4 +91,5 @@ void	ft_free(t_philos *philos, char **argv)
 		free(head_forks->fork);
 		free(head_forks);
 	}
+	free(m_global);
 }

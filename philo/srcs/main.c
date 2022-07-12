@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 08:56:35 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/07 16:36:42 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/12 16:03:42 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 
 int	main(int argc, char **argv)
 {
-	t_philos	*philos;
-	pthread_t	*thread;
+	t_philos		*philos;
+	pthread_t		*thread;
+	pthread_mutex_t	*m_global;
 
 	if (argc < 5)
 		return (printf("Not enough arguments\n"), 1);
@@ -23,9 +24,8 @@ int	main(int argc, char **argv)
 	if (philos == NULL)
 		return (2);
 	thread = malloc(sizeof(pthread_t) * (ft_atoi(argv[1]) + 1));
-	init_threads(philos, thread, -1, argv);
-	usleep(21000);
+	m_global = init_threads(philos, thread, -1, argv);
 	free(philos->start);
-	ft_free(philos, argv);
+	ft_free(philos, argv, m_global);
 	return (0);
 }
