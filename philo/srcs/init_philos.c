@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 09:22:37 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/13 10:58:58 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/13 12:22:08 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,32 +108,6 @@ int argc, int number)
 	head = fill_variables2(head);
 	if (!head)
 		return (NULL);
-	return (head);
-}
-
-static t_philos	*init_mutexes(t_philos *philo, int i, int number, t_philos *head)
-{
-	pthread_mutex_t	*m_alive;
-	pthread_mutex_t	*m_start;
-	pthread_mutex_t	*m_count;
-	pthread_mutex_t	*m_last;
-
-	m_last = malloc(sizeof(pthread_mutex_t));
-	pthread_mutex_init(m_last, NULL);
-	m_count = malloc(sizeof(pthread_mutex_t));
-	pthread_mutex_init(m_count, NULL);
-	m_alive = malloc(sizeof(pthread_mutex_t));
-	pthread_mutex_init(m_alive, NULL);
-	m_start = malloc(sizeof(pthread_mutex_t));
-	pthread_mutex_init(m_start, NULL);
-	while (++i < number)
-	{
-		philo->m_last = m_last;
-		philo->m_count = m_count;
-		philo->m_alive = m_alive;
-		philo->m_start = m_start;
-		philo = philo->next;
-	}
 	return (head);
 }
 

@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 08:58:02 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/12 17:58:56 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/13 11:57:28 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,22 @@ struct s_philos
 	t_philos		*before;
 };
 
-int			ft_atoi(const char *nptr);
+int					ft_atoi(const char *nptr);
 //void	ft_lstadd_back(t_fourchette *alst, t_fourchette *new);
 //t_fourchette	*ft_lstnew(void *content);
-void		*philo_actions(void *param);
-long int	get_time(struct timeval end, struct timeval *start, t_philos *philo);
-int			check_args(char **argv, int argc, int i);
-void		ft_free(t_philos *philos, char **argv, pthread_mutex_t *m_global);
-t_philos	*init_philos(char **argv, int argc);
+void				*philo_actions(void *param);
+long int			get_time(struct timeval end,
+						struct timeval *start, t_philos *philo);
+int					check_args(char **argv, int argc, int i);
+void				ft_free(t_philos *philos, char **argv,
+						pthread_mutex_t *m_global);
+t_philos			*init_philos(char **argv, int argc);
 pthread_mutex_t		*init_threads(t_philos *philos, pthread_t *threads,
-				int i, char **argv);
-void		free_pthreads(pthread_t *pthreads);
+						int i, char **argv);
+void				free_pthreads(pthread_t *pthreads);
+t_philos			*init_mutexes(t_philos *philo, int i,
+						int number, t_philos *head);
+void				*philo_sleep(t_philos *philo);
+void				*philo_eat(t_philos *philo);
 
 #endif

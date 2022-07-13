@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:20:07 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/13 11:07:32 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/13 12:22:19 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,43 +31,43 @@ static int	is_finished(t_philos *philo, int number)
 	return (1);
 }
 
+static void	catch_while_while(t_philos *philo, struct timeval end)
+{
+	pthread_mutex_lock(philo->m_count);
+	pthread_mutex_lock(philo->m_last);
+	if (get_time(end, philo->start, philo)
+		- philo->last_eat >= philo->time_to_die
+		&& philo->count != philo->must_eat)
+	{
+		pthread_mutex_unlock(philo->m_last);
+		pthread_mutex_unlock(philo->m_count);
+		pthread_mutex_lock(philo->m_alive);
+		*philo->alive = 1;
+		pthread_mutex_unlock(philo->m_alive);
+	}
+	else
+	{
+		pthread_mutex_unlock(philo->m_last);
+		pthread_mutex_unlock(philo->m_count);
+	}
+	pthread_mutex_lock(philo->m_alive);
+}
+
 static void	*catch_while(t_philos *philo, int number, struct timeval end, int i)
 {
 	pthread_mutex_lock(philo->m_alive);
 	if (*philo->alive == 1)
-	{
-		pthread_mutex_unlock(philo->m_alive);
-		return (NULL);
-	}
+		return (pthread_mutex_unlock(philo->m_alive), NULL);
 	pthread_mutex_unlock(philo->m_alive);
 	if (is_finished((t_philos *)philo, number) == 1)
 		return (NULL);
 	while (++i < number)
 	{
-		gettimeofday(&end, NULL);
-		pthread_mutex_lock(philo->m_count);
-		pthread_mutex_lock(philo->m_last);
-		if (get_time(end, philo->start, philo)
-			- philo->last_eat >= philo->time_to_die
-			&& philo->count != philo->must_eat)
-		{
-			pthread_mutex_unlock(philo->m_last);
-			pthread_mutex_unlock(philo->m_count);
-			pthread_mutex_lock(philo->m_alive);
-			*philo->alive = 1;
-			pthread_mutex_unlock(philo->m_alive);
-		}
-		else
-		{
-			pthread_mutex_unlock(philo->m_last);
-			pthread_mutex_unlock(philo->m_count);
-		}
-		pthread_mutex_lock(philo->m_alive);
+		catch_while_while(philo, end);
 		if (*philo->alive == 1)
 		{
 			pthread_mutex_unlock(philo->m_alive);
 			pthread_mutex_lock(philo->write);
-			gettimeofday(&end, NULL);
 			printf("%ld %d died !\n",
 				get_time(end, philo->start, philo), philo->number);
 			printf("Previous eating of %d was %d\n",
@@ -88,9 +88,7 @@ static void	*catch_death(void *philos)
 	struct timeval	end;
 	int				number;
 	int				i;
-//	int				j;
 
-	//j = 0;
 	philo = (t_philos *)philos;
 	threads = (pthread_t *)philo->threads;
 	i = -1;
@@ -98,49 +96,27 @@ static void	*catch_death(void *philos)
 	while (1)
 	{
 		if (catch_while(philos, number, end, i) == NULL)
-		{
-		//	j = 1;
 			break ;
-		}
 	}
-	pthread_mutex_lock(philo->m_alive);
-	i = -1;
-	if (*philo->alive == 1)
+	while (++i < number)
 	{
-		pthread_mutex_unlock(philo->m_alive);
-		while (++i < number)
-		{
-			pthread_join(threads[i], NULL);
-			pthread_detach(threads[i]);
-		}
+		pthread_join(threads[i], NULL);
+		pthread_detach(threads[i]);
 	}
-	else
-	{
-		pthread_mutex_unlock(philo->m_alive);
-		while (++i < number)
-		{
-			pthread_join(threads[i], NULL);
-			pthread_detach(threads[i]);
-		}
-	}
-	//if (j == 1)
-	//	pthread_mutex_unlock(philo->write);
 	return (NULL);
 }
 
-pthread_mutex_t	*init_threads(t_philos *philos, pthread_t *threads, int i, char **argv)
+pthread_mutex_t	*init_threads(t_philos *philos, pthread_t *threads,
+	int i, char **argv)
 {
 	pthread_mutex_t	*m_global;
 
 	m_global = malloc(sizeof(pthread_mutex_t));
 	pthread_mutex_init(m_global, NULL);
 	pthread_mutex_lock(m_global);
-	/*while (++i < 5)
-	{
-		printf("number %d left fork = %p right fork = %p\n", philos->number, philos->left_fork, philos->right_fork);
-		philos = philos->next;
-	}
-	i = -1;*/
+	pthread_mutex_lock(philos->m_start);
+	gettimeofday(philos->start, NULL);
+	pthread_mutex_unlock(philos->m_start);
 	while (++i < ft_atoi(argv[1]))
 	{
 		if (pthread_create(&threads[i], NULL,
