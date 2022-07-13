@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 09:22:37 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/13 15:25:27 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/13 17:34:39 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ static t_philos	*fill_variables2(t_philos *philos, char **argv)
 		return (NULL);
 	philos->start = start;
 	philos->alive = alive;
+	philos->philo_number = ft_atoi(argv[1]);
 	philos = philos->next;
 	while (philos->number != 1)
 	{
@@ -78,6 +79,7 @@ static t_philos	*fill_variables2(t_philos *philos, char **argv)
 		philos->start = start;
 		philos = philos->next;
 	}
+	philos->philo_number = ft_atoi(argv[1]);
 	philos = init_forks(philos, -1);
 	return (philos);
 }
