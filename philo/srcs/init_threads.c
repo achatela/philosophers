@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:20:07 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/13 09:41:28 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/13 11:07:32 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	*catch_while(t_philos *philo, int number, struct timeval end, int i)
 	}
 	pthread_mutex_unlock(philo->m_alive);
 	if (is_finished((t_philos *)philo, number) == 1)
-		return (pthread_mutex_lock(philo->write), NULL);
+		return (NULL);
 	while (++i < number)
 	{
 		gettimeofday(&end, NULL);
@@ -72,6 +72,7 @@ static void	*catch_while(t_philos *philo, int number, struct timeval end, int i)
 				get_time(end, philo->start, philo), philo->number);
 			printf("Previous eating of %d was %d\n",
 				philo->number, philo->last_eat);
+			pthread_mutex_unlock(philo->write);
 			return (NULL);
 		}
 		pthread_mutex_unlock(philo->m_alive);
@@ -87,9 +88,9 @@ static void	*catch_death(void *philos)
 	struct timeval	end;
 	int				number;
 	int				i;
-	int				j;
+//	int				j;
 
-	j = 0;
+	//j = 0;
 	philo = (t_philos *)philos;
 	threads = (pthread_t *)philo->threads;
 	i = -1;
@@ -98,7 +99,7 @@ static void	*catch_death(void *philos)
 	{
 		if (catch_while(philos, number, end, i) == NULL)
 		{
-			j = 1;
+		//	j = 1;
 			break ;
 		}
 	}
@@ -122,8 +123,8 @@ static void	*catch_death(void *philos)
 			pthread_detach(threads[i]);
 		}
 	}
-	if (j == 1)
-		pthread_mutex_unlock(philo->write);
+	//if (j == 1)
+	//	pthread_mutex_unlock(philo->write);
 	return (NULL);
 }
 
@@ -134,7 +135,6 @@ pthread_mutex_t	*init_threads(t_philos *philos, pthread_t *threads, int i, char 
 	m_global = malloc(sizeof(pthread_mutex_t));
 	pthread_mutex_init(m_global, NULL);
 	pthread_mutex_lock(m_global);
-	threads = malloc(sizeof(pthread_t) * (ft_atoi(argv[1]) + 1));
 	/*while (++i < 5)
 	{
 		printf("number %d left fork = %p right fork = %p\n", philos->number, philos->left_fork, philos->right_fork);
@@ -156,7 +156,6 @@ pthread_mutex_t	*init_threads(t_philos *philos, pthread_t *threads, int i, char 
 	pthread_create(&threads[i], NULL, &catch_death, philos);
 	pthread_join(threads[i], NULL);
 	pthread_detach(threads[i]);
-	free(threads);
 	pthread_mutex_unlock(m_global);
 	return (m_global);
 }

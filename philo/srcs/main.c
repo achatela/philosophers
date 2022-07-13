@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 08:56:35 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/12 16:03:42 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/13 11:06:43 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int	main(int argc, char **argv)
 	thread = malloc(sizeof(pthread_t) * (ft_atoi(argv[1]) + 1));
 	m_global = init_threads(philos, thread, -1, argv);
 	free(philos->start);
+	usleep(50000);
+	free(thread);
 	ft_free(philos, argv, m_global);
 	return (0);
 }

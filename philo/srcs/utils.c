@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 09:01:57 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/12 15:59:46 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/13 11:06:01 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,16 +59,12 @@ void	ft_free(t_philos *philos, char **argv, pthread_mutex_t *m_global)
 	i = -1;
 	pthread_mutex_lock(m_global);
 	forks = philos->free_fork;
-	//if (pthread_mutex_lock(philos->write) == EBUSY)
-	//	pthread_mutex_unlock(philos->write);
 	pthread_mutex_destroy(philos->write);
-//	if (pthread_mutex_lock(philos->m_count) == EBUSY)
-//		pthread_mutex_unlock(philos->m_count);
 	pthread_mutex_destroy(philos->m_count);
-	//pthread_mutex_unlock(philos->m_alive);
 	pthread_mutex_destroy(philos->m_alive);
-	//pthread_mutex_lock(philos->m_start);
 	pthread_mutex_destroy(philos->m_start);
+	pthread_mutex_destroy(philos->m_last);
+	free(philos->m_last);
 	free(philos->m_count);
 	free(philos->m_start);
 	free(philos->m_alive);
