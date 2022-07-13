@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 09:22:37 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/13 12:22:08 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/13 15:25:27 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static t_philos	*init_forks(t_philos *philos, int i)
 	return (philos);
 }
 
-static t_philos	*fill_variables2(t_philos *philos)
+static t_philos	*fill_variables2(t_philos *philos, char **argv)
 {
 	struct timeval	*start;
 	void			*alive;
@@ -72,6 +72,7 @@ static t_philos	*fill_variables2(t_philos *philos)
 	philos = philos->next;
 	while (philos->number != 1)
 	{
+		philos->philo_number = ft_atoi(argv[1]);
 		philos->last_eat = 0;
 		philos->alive = alive;
 		philos->start = start;
@@ -105,7 +106,7 @@ int argc, int number)
 	philos->before->next = head;
 	head->before = philos->before;
 	free(philos);
-	head = fill_variables2(head);
+	head = fill_variables2(head, argv);
 	if (!head)
 		return (NULL);
 	return (head);

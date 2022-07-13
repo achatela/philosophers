@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 11:40:59 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/13 12:22:05 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/13 15:21:23 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@ static void	philo_sleep2(t_philos *philo, struct timeval end)
 		pthread_mutex_lock(philo->m_alive);
 		if (*philo->alive == 0)
 			printf("%ld %d is sleeping\n",
+				get_time(end, philo->start, philo), philo->number);
+		if (*philo->alive == 0)
+			printf("%ld %d is thinking\n",
 				get_time(end, philo->start, philo), philo->number);
 		pthread_mutex_unlock(philo->m_alive);
 		pthread_mutex_unlock(philo->write);

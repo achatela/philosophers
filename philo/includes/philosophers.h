@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 08:58:02 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/13 12:34:50 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/13 15:24:43 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ struct s_philos
 {
 	int				*alive;
 	int				number;
+	int				philo_number;
 	int				time_to_die;
 	int				time_to_eat;
 	int				time_to_sleep;
