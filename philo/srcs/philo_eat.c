@@ -6,13 +6,13 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 11:55:54 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/13 12:24:44 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/13 12:30:58 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-static void *philo_eat2(t_philos *philo, struct timeval end)
+static void	*philo_eat_two(t_philos *philo, struct timeval end)
 {
 	if (*philo->alive == 0)
 	{
@@ -36,8 +36,7 @@ static void *philo_eat2(t_philos *philo, struct timeval end)
 	{
 		pthread_mutex_unlock(philo->left_fork);
 		pthread_mutex_unlock(philo->right_fork);
-		pthread_mutex_unlock(philo->m_alive);
-		return (NULL);
+		return (pthread_mutex_unlock(philo->m_alive), NULL);
 	}
 	return (philo);
 }
@@ -56,7 +55,7 @@ void	*philo_eat(t_philos *philo)
 	}
 	pthread_mutex_unlock(philo->m_alive);
 	pthread_mutex_lock(philo->m_alive);
-    if (philo_eat2(philo, end) == NULL)
+	if ((philo_eat_two(philo, end) == NULL))
 		return (NULL);
 	pthread_mutex_lock(philo->m_last);
 	philo->last_eat = get_time(end, philo->start, philo);

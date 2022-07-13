@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 08:58:02 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/13 11:57:28 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/13 12:34:50 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 # include <unistd.h>
 # include <time.h>
 # include <sys/time.h>
-//# include <errno.h>
 
 typedef struct s_forks	t_forks;
 struct s_forks
@@ -54,9 +53,6 @@ struct s_philos
 };
 
 int					ft_atoi(const char *nptr);
-//void	ft_lstadd_back(t_fourchette *alst, t_fourchette *new);
-//t_fourchette	*ft_lstnew(void *content);
-void				*philo_actions(void *param);
 long int			get_time(struct timeval end,
 						struct timeval *start, t_philos *philo);
 int					check_args(char **argv, int argc, int i);
@@ -68,7 +64,16 @@ pthread_mutex_t		*init_threads(t_philos *philos, pthread_t *threads,
 void				free_pthreads(pthread_t *pthreads);
 t_philos			*init_mutexes(t_philos *philo, int i,
 						int number, t_philos *head);
+
+/**
+ *	Philos_Actions
+ **/
+void				*philo_actions(void *param);
 void				*philo_sleep(t_philos *philo);
 void				*philo_eat(t_philos *philo);
+void				*take_forks(t_philos *philo, struct timeval end);
+/**
+ *	Philos_Actions
+ **/
 
 #endif
