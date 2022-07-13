@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:20:07 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/12 17:38:59 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/13 09:41:28 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ pthread_mutex_t	*init_threads(t_philos *philos, pthread_t *threads, int i, char 
 		}
 		philos = philos->next;
 	}
-	usleep(philos->time_to_die * 500);
+	usleep(philos->time_to_die * 200);
 	philos->threads = threads;
 	pthread_create(&threads[i], NULL, &catch_death, philos);
 	pthread_join(threads[i], NULL);

@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/07 12:19:38 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/12 17:53:58 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/13 09:43:22 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ static void	*take_forks(t_philos *philo, struct timeval end)
 	if (*philo->alive == 0)
 	{
 		pthread_mutex_unlock(philo->m_alive);
-		pthread_mutex_lock(philo->left_fork);
+		if (philo->number == 2)
+			pthread_mutex_lock(philo->right_fork);
+		else
+			pthread_mutex_lock(philo->left_fork);
 		pthread_mutex_lock(philo->m_alive);
 		if (*philo->alive == 0)
 		{
@@ -42,14 +45,20 @@ static void	*take_forks(t_philos *philo, struct timeval end)
 	else
 	{
 		pthread_mutex_unlock(philo->m_alive);
-		pthread_mutex_unlock(philo->left_fork);
+		if (philo->number == 2)
+			pthread_mutex_unlock(philo->right_fork);
+		else
+			pthread_mutex_unlock(philo->left_fork);
 		return (NULL);
 	}
 	pthread_mutex_lock(philo->m_alive);
 	if (*philo->alive == 1)
 	{
 		pthread_mutex_unlock(philo->m_alive);
-		pthread_mutex_unlock(philo->left_fork);
+		if (philo->number == 2)
+			pthread_mutex_unlock(philo->right_fork);
+		else
+			pthread_mutex_unlock(philo->left_fork);
 		return (NULL);
 	}
 	pthread_mutex_unlock(philo->m_alive);
@@ -57,7 +66,10 @@ static void	*take_forks(t_philos *philo, struct timeval end)
 	if (*philo->alive == 0)
 	{
 		pthread_mutex_unlock(philo->m_alive);
-		pthread_mutex_lock(philo->right_fork);
+		if (philo->number == 2)
+			pthread_mutex_lock(philo->left_fork);
+		else
+			pthread_mutex_lock(philo->right_fork);
 		pthread_mutex_lock(philo->m_alive);
 		if (*philo->alive == 0)
 		{
@@ -176,10 +188,10 @@ void	*philo_actions(void *param)
 		gettimeofday(philo->start, NULL);
 		pthread_mutex_unlock(philo->m_start);
 	}
-	if (philo->number != 1)
-		usleep(1000);
 	if (philo->number % 2 == 0)
-		usleep(philo->time_to_eat * 500);
+		usleep(philo->time_to_eat * 200);
+	else
+		usleep(1000);
 	while (philo->count != philo->must_eat)
 	{
 		if (take_forks(philo, end) == NULL)
