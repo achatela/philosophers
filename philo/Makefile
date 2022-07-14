@@ -1,11 +1,13 @@
 NAME	= philo
 
-SRCS	=	srcs/main.c	srcs/check_integers.c srcs/utils.c srcs/init_philos.c srcs/init_threads.c srcs/philo_actions.c 	srcs/philo_sleep.c	srcs/philo_eat.c srcs/philo_forks.c	\
+SRCS	=	srcs/main.c	srcs/check_integers.c srcs/utils.c srcs/init_philos.c srcs/init_threads.c \
+			srcs/philo_actions.c 	srcs/philo_sleep.c	srcs/philo_eat.c srcs/philo_forks.c	\
+			srcs/take_first_fork.c \
 
 OBJS = $(SRCS:.c=.o)
 CC = gcc
 RM = rm -f
-CFLAGS = -Wall -Wextra #-Werror #-fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror -fsanitize=thread
 INC = -I./includes
 
 .c.o:

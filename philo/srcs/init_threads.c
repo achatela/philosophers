@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:20:07 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/14 12:16:37 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/14 14:57:21 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,6 @@ static void	*catch_while(t_philos *philo, int number, struct timeval end, int i)
 	if (*philo->alive == 1)
 		return (pthread_mutex_unlock(philo->m_alive), NULL);
 	pthread_mutex_unlock(philo->m_alive);
-//	if (is_finished((t_philos *)philo, number) == 1)
-//		return (NULL);
 	while (++i < number)
 	{
 		catch_while_while(philo, end);
@@ -97,7 +95,6 @@ static void	*catch_death(void *philos)
 	{
 		if (catch_while(philos, number, end, i) == NULL)
 			break ;
-		//usleep(1000);
 		if (is_finished((t_philos *)philo, number) == 1)
 			break ;
 	}

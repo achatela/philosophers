@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 08:58:02 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/13 15:24:43 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/14 14:07:05 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void				*philo_actions(void *param);
 void				*philo_sleep(t_philos *philo);
 void				*philo_eat(t_philos *philo);
 void				*take_forks(t_philos *philo, struct timeval end);
+void				*take_first_fork(t_philos *philo, struct timeval end);
 /**
  *	Philos_Actions
  **/
