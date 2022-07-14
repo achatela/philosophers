@@ -6,7 +6,7 @@
 /*   By: achatela <achatela@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/02 11:20:07 by achatela          #+#    #+#             */
-/*   Updated: 2022/07/13 17:37:40 by achatela         ###   ########.fr       */
+/*   Updated: 2022/07/14 12:16:37 by achatela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,8 +59,8 @@ static void	*catch_while(t_philos *philo, int number, struct timeval end, int i)
 	if (*philo->alive == 1)
 		return (pthread_mutex_unlock(philo->m_alive), NULL);
 	pthread_mutex_unlock(philo->m_alive);
-	if (is_finished((t_philos *)philo, number) == 1)
-		return (NULL);
+//	if (is_finished((t_philos *)philo, number) == 1)
+//		return (NULL);
 	while (++i < number)
 	{
 		catch_while_while(philo, end);
@@ -97,6 +97,9 @@ static void	*catch_death(void *philos)
 	{
 		if (catch_while(philos, number, end, i) == NULL)
 			break ;
+		//usleep(1000);
+		if (is_finished((t_philos *)philo, number) == 1)
+			break ;
 	}
 	while (++i < number)
 	{
@@ -127,7 +130,7 @@ pthread_mutex_t	*init_threads(t_philos *philos, pthread_t *threads,
 		}
 		philos = philos->next;
 	}
-	usleep(philos->time_to_die * 100);
+	usleep(60000);
 	philos->threads = threads;
 	pthread_create(&threads[i], NULL, &catch_death, philos);
 	pthread_join(threads[i], NULL);
